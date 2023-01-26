@@ -1,4 +1,4 @@
 module "prod" {
-    source = "../../infra" 
+    source = "../../infra"
     
 }
