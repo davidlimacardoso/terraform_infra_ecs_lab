@@ -20,6 +20,32 @@ module "ecs" {
     }
   }
 
+  resource "aws_ecs_task_definition" "name-prd-tsk" {
+    family                   = "django-api"
+    requires_compatibilities = ["FARGATE"]
+    network_mode             = "awsvpc"
+    cpu                      = 256
+    memory                   = 512
+    execution_role_arn       = aws_iam_role.ecs_role.arn 
+    container_definitions    = jsonencode(
+        [
+            {
+                "name" = var.ambient
+                "image" = "docker push ${var.account}.dkr.ecr.us-east-1.amazonaws.com/nginx-hello/server"
+                "cpu" = 256
+                "memory" = 512
+                "essential" = true
+                "portMappings" = [
+                    {
+                    "containerPort" = 8000
+                    "hostPort"      = 8000
+                    }
+                ]
+            }
+        ]
+    )
+    }
+
   tags = {
     Terraform = "true"
     Environment = "prd"
