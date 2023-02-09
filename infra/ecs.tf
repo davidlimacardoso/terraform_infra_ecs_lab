@@ -48,7 +48,7 @@ module "ecs" {
 
 resource "aws_ecs_service" "django-api" {
   name            = "django-api"
-  cluster         = module.ecs.cluster.id
+  cluster         = module.ecs.ecs_cluster.id
   task_definition = aws_ecs_task_definition.django-api.arn
   desired_count   = 3
 
