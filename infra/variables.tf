@@ -5,3 +5,7 @@ variable "repository_name" {
 variable "profileIAM" {
    type = string
 }
+
+variable "ambient" {
+  type = string
+}
