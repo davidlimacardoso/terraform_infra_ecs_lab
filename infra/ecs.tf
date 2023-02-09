@@ -50,4 +50,4 @@ module "ecs" {
     Terraform = "true"
     Environment = "prd"
   }
-}
+} 
