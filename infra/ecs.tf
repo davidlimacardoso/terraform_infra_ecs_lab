@@ -20,7 +20,7 @@ module "ecs" {
     }
   }
 
-  resource "aws_ecs_task_definition" "name-prd-tsk" {
+  resource "aws_ecs_task_definition" "django-api" {
     family                   = "django-api"
     requires_compatibilities = ["FARGATE"]
     network_mode             = "awsvpc"
@@ -45,6 +45,30 @@ module "ecs" {
         ]
     )
     }
+
+resource "aws_ecs_service" "django-api" {
+  name            = "django-api"
+  cluster         = module.ecs.cluster.id
+  task_definition = aws_ecs_task_definition.django-api.arn
+  desired_count   = 3
+
+  load_balancer {
+    target_group_arn = aws_lb_target_group.target.arn
+    container_name   = var.ambient
+    container_port   = 8000
+  }
+}
+
+network_configuration {
+    subnets         = module.vpc.private_subnets
+    security_groups = [aws_security_group.private.id] 
+
+}
+
+capacity_provider_strategy {
+    capacity_provider   = "FARGATE"
+    weight = 1 
+}
 
   tags = {
     Terraform = "true"
